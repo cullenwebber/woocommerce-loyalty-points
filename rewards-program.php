@@ -142,6 +142,12 @@ class Woo_Rewards_Program
         //Handles the additional fields on save in the edit user interface
         $this->loader->add_action('personal_options_update', $plugin_admin, 'save_woo_rewards_edit_user');
         $this->loader->add_action('edit_user_profile_update', $plugin_admin, 'save_woo_rewards_edit_user');
+
+        //Add the information to the manage users table
+        $this->loader->add_filter('manage_users_columns', $plugin_admin, 'add_woo_rewards_users_column');
+        $this->loader->add_filter('manage_users_custom_column', $plugin_admin, 'add_woo_rewards_users_column_data', 10, 3);
+        $this->loader->add_filter('manage_users_sortable_columns', $plugin_admin, 'woo_rewards_user_column_sortable');
+        $this->loader->add_action('pre_get_users', $plugin_admin, 'woo_rewards_table_orderby');
     }
 
     private function define_public_hooks()

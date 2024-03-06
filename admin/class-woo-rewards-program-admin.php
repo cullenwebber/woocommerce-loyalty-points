@@ -180,4 +180,53 @@ class Woo_Rewards_Program_Admin
         //Updates the value
         update_user_meta($user_id, 'woo_user_points', sanitize_text_field($_POST['woo_user_points']));
     }
+
+    /**
+     * Add the Woo Rewards Points column to the manage users table
+     * 
+     */
+    public function add_woo_rewards_users_column($columns)
+    {
+        $columns['woo_reward_points'] = 'Woo Reward Points';
+        return $columns;
+    }
+
+    /**
+     * Add the woo rewards points data to the column
+     * 
+     */
+    public function add_woo_rewards_users_column_data($value, $column_name, $user_id)
+    {
+        if ($column_name === 'woo_reward_points') {
+            $points = (int) Woo_Rewards_Program_Utils::get_users_current_points($user_id);
+            return $points;
+        }
+        return $value;
+    }
+
+    /**
+     * Make a sortable user column for the woo rewards points
+     * 
+     */
+    public function woo_rewards_user_column_sortable($columns)
+    {
+        $columns['woo_reward_points'] = 'woo_reward_points';
+        return $columns;
+    }
+
+    /**
+     * Make a sortable query for the woo rewards points users column
+     * 
+     */
+    public function woo_rewards_table_orderby($query)
+    {
+        if (!is_admin() || !$query->is_main_query()) {
+            return;
+        }
+
+        if ($query->get('orderby') === 'woo_reward_points') {
+            $query->set('meta_key', 'woo_reward_points');
+            $query->set('orderby', 'meta_value_num');
+        }
+    }
 }
