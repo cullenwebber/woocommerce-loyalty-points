@@ -54,15 +54,6 @@ class Woo_Rewards_Program_Admin
         $this->version = $version;
     }
 
-
-    public function enqueue_styles()
-    {
-    }
-
-    public function enqueue_scripts()
-    {
-    }
-
     /**
      * Adds the submenu to the woocommerce parent menu
      * 

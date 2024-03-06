@@ -128,10 +128,6 @@ class Woo_Rewards_Program
             return false;
         }
 
-        //Load in the styles & scripts for the admin area
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
-
         //Handles the point update system when an order is completed
         $this->loader->add_action('woocommerce_new_order', $plugin_admin, 'woo_rewards_store_points');
 
