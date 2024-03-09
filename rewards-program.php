@@ -144,6 +144,10 @@ class Woo_Rewards_Program
         $this->loader->add_filter('manage_users_custom_column', $plugin_admin, 'add_woo_rewards_users_column_data', 10, 3);
         $this->loader->add_filter('manage_users_sortable_columns', $plugin_admin, 'woo_rewards_user_column_sortable');
         $this->loader->add_action('pre_get_users', $plugin_admin, 'woo_rewards_table_orderby');
+
+        //Add to the cart information
+        $this->loader->add_filter('woocommerce_add_cart_item_data', $plugin_admin, 'add_woo_rewards_cart_data', 10, 4);
+        $this->loader->add_filter('woocommerce_get_item_data', $plugin_admin, 'get_woo_rewards_cart_data', 10, 2);
     }
 
     private function define_public_hooks()
@@ -169,6 +173,12 @@ class Woo_Rewards_Program
 
         //Update the cart with the discount when the slider is moved
         $this->loader->add_action('woocommerce_cart_calculate_fees', $plugin_public, 'woo_rewards_update_discount');
+
+        //Show notice on my account page
+        $this->loader->add_action('wp', $plugin_public, 'woo_rewards_my_account_display');
+
+        //Show points before buy button
+        $this->loader->add_action('woocommerce_before_add_to_cart_button', $plugin_public, 'show_points_for_product', );
     }
 
 

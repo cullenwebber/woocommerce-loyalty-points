@@ -167,4 +167,53 @@ class Woo_Rewards_Program_Public
             WC()->session->set('loyalty_points_used', $points_used);
         }
     }
+
+    /**
+     * Show a notice when the use has points in their account on the my-account page
+     * 
+     * 
+     */
+
+    public function woo_rewards_my_account_display()
+    {
+
+        if (!is_account_page()) {
+            return;
+        }
+
+        $user_id = get_current_user_id();
+
+        if (!$user_id) {
+            return;
+        }
+
+        $user_points = Woo_Rewards_Program_Utils::get_users_current_points($user_id);
+        $discount_per_threshold = Woo_Rewards_Program_Utils::get_discount_per_threshold();
+        $point_threshold = Woo_Rewards_Program_Utils::get_min_points_threshold();
+
+        $message = 'Your account has ' . $user_points . ' points. Every ' . $discount_per_threshold . ' points, you can claim $' . $point_threshold . ' off at checkout';
+        wc_add_notice($message, 'notice');
+    }
+
+
+    /***
+     * Show a notice on much points will be earnt if this product is bought
+     * 
+     */
+
+    public function show_points_for_product()
+    {
+
+        global $product;
+
+        if (!$product) {
+            return;
+        }
+
+        $price = $product->get_price();
+
+        $points = Woo_Rewards_Program_Utils::calculate_points_earnt($price);
+
+        include plugin_dir_path(__FILE__) . "partials/woo-rewards-program-public-points-for-product.php";
+    }
 }

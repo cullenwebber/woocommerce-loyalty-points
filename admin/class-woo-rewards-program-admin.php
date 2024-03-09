@@ -220,4 +220,34 @@ class Woo_Rewards_Program_Admin
             $query->set('orderby', 'meta_value_num');
         }
     }
+
+
+    /**
+     * Add how much points will be earned to the cart
+     */
+    public function add_woo_rewards_cart_data($cart_item_data, $product_id, $variation_id, $quantity)
+    {
+        $product = wc_get_product($product_id);
+        $price = intval($product->get_price());
+        $points = Woo_Rewards_Program_Utils::calculate_points_earnt($price);
+
+        $cart_item_data['points_to_earn'] = $points;
+
+        return $cart_item_data;
+    }
+
+    /**
+     * Get how much points will be earned to display in the cart
+     */
+    public function get_woo_rewards_cart_data($cart_item_data, $cart_item)
+    {
+        if (!empty($cart_item['points_to_earn'])) {
+            $cart_item_data[] = array(
+                'key'   => 'Points',
+                'value' => $cart_item['points_to_earn']
+            );
+        }
+
+        return $cart_item_data;
+    }
 }
